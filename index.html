@@ -13,7 +13,21 @@
     <meta name="theme-color" content="#080c18" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#eef2f8" media="(prefers-color-scheme: light)">
     <link rel="canonical" href="https://as-dev.github.io/weather/">
+<!-- Add this to your existing <head> section -->
 
+<!-- PNG Favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" href="/icons/apple-icon-180.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#080c18">
     <!-- ===== OPEN GRAPH (Facebook / WhatsApp / LinkedIn) ===== -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="AS-DEV Weather">
@@ -1601,5 +1615,83 @@
 
     init();
     </script>
+ <!-- PWA Installation Script -->
+<script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registered: ', registration);
+                })
+                .catch(error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        });
+    }
+
+    // Check if app is installed
+    function isAppInstalled() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+               window.navigator.standalone === true;
+    }
+
+    // Handle install prompt
+    let deferredPrompt;
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install button if not installed
+        if (!isAppInstalled()) {
+            showInstallButton();
+        }
+    });
+
+    function showInstallButton() {
+        const installBtn = document.createElement('button');
+        installBtn.id = 'installPWA';
+        installBtn.innerHTML = '📲 Install App';
+        installBtn.style.cssText = `
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #63b3ff, #a78bfa);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 10000;
+            animation: pulse 2s infinite;
+        `;
+        
+        installBtn.onclick = async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log('Install outcome:', outcome);
+            deferredPrompt = null;
+            installBtn.remove();
+        };
+        
+        document.body.appendChild(installBtn);
+    }
+
+    // Add pulse animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+    `;
+    document.head.appendChild(style);
+</script>               
 </body>
 </html>
