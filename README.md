@@ -21,7 +21,7 @@ A beautiful, feature-rich weather Progressive Web App with real-time forecasts, 
 
 | Category | Features |
 |----------|----------|
-| *eather** | Current conditions, 7-day forecast, 24-hour hourly, feels like, humidity, wind, UV index |
+| **🌤Weather** | Current conditions, 7-day forecast, 24-hour hourly, feels like, humidity, wind, UV index |
 | **🌙 Moon** | Real-time moon phases, illumination %, next full/new moon, stargazing quality |
 | **☀️ Sun** | Sunrise/sunset, day length, solar noon, visual sun position tracker |
 | **☪️ Islamic** | Hijri date conversion, Islamic month names, moon sighting info |
